@@ -63,6 +63,7 @@ class MobileAppPlugin : Plugin<Project> {
                             implementation(ui)
                             implementation(components.resources)
                             implementation(components.uiToolingPreview)
+                            implementation(materialIconsExtended)
                             implementation(getLibraryFromLibsToml("androidx.lifecycle.viewmodel"))
                             implementation(getLibraryFromLibsToml("androidx.lifecycle.viewmodel"))
                             implementation(getLibraryFromLibsToml("androidx.lifecycle.runtime"))

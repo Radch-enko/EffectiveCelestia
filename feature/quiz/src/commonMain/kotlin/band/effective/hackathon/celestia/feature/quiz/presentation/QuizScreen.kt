@@ -82,7 +82,7 @@ private fun QuizScreenContent(state: QuizState, onAnswerSelected: (Answer) -> Un
                 // Question text
                 Text(
                     text = question.text,
-                    style = MaterialTheme.typography.bodyLarge,
+                    style = MaterialTheme.typography.titleLarge,
                     textAlign = TextAlign.Start,
                     modifier = Modifier.fillMaxWidth(),
                     color = Color.White,

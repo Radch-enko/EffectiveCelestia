@@ -33,6 +33,7 @@ class MobileCoreUiConventionPlugin : Plugin<Project> {
                             implementation(ui)
                             implementation(components.resources)
                             implementation(components.uiToolingPreview)
+                            implementation(materialIconsExtended)
                             implementation(getLibraryFromLibsToml("coil"))
                             implementation(getLibraryFromLibsToml("coil.network.ktor"))
                             implementation(getLibraryFromLibsToml("multiplatformSettings"))

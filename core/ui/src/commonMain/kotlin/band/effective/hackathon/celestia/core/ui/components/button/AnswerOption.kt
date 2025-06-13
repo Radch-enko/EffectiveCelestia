@@ -37,6 +37,7 @@ fun AnswerOption(
             containerColor = Color(0x14FFFFFF),
         ),
         shape = RoundedCornerShape(18.dp),
+        elevation = null,
     ) {
         Row(
             modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp),

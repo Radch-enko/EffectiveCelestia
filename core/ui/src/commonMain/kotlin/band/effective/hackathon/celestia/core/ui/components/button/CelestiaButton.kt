@@ -23,6 +23,7 @@ fun CelestiaButton(
             containerColor = Color(0x14FFFFFF),
         ),
         shape = RoundedCornerShape(18.dp),
+        elevation = null,
     ) {
         Text(
             text = text,

@@ -9,6 +9,7 @@ import androidx.navigation.compose.composable
 import band.effective.hackathon.celestia.feature.quiz.presentation.QuizScreen
 import band.effective.hackathon.celestia.feature.splash.presentation.SplashScreen
 import band.effective.hackathon.celestia.feature.test.presentation.TestScreen
+import band.effective.hackathon.celestia.screens.AboutUsScreen
 
 /**
  * Main navigation graph for the app
@@ -39,6 +40,10 @@ fun NavGraph(navController: NavHostController, startDestination: String = NavRou
                     popUpTo(NavRoutes.QUIZ) { inclusive = true }
                 }
             })
+        }
+
+        composable(NavRoutes.ABOUT_US) {
+            AboutUsScreen()
         }
     }
 }
