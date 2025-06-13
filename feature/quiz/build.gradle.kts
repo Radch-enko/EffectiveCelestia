@@ -6,6 +6,7 @@ kotlin {
     sourceSets {
         commonMain.dependencies {
             implementation(libs.bundles.koin)
+            implementation(libs.ktor.client.core)
         }
 
         androidMain.dependencies {

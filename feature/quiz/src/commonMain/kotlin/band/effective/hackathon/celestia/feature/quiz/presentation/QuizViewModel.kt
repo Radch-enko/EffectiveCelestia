@@ -3,7 +3,9 @@ package band.effective.hackathon.celestia.feature.quiz.presentation
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import band.effective.hackathon.celestia.feature.quiz.domain.model.Answer
-import band.effective.hackathon.celestia.feature.quiz.domain.repository.QuizRepository
+import band.effective.hackathon.celestia.feature.quiz.domain.usecase.HandleAnswerSelectionUseCase
+import band.effective.hackathon.celestia.feature.quiz.domain.usecase.LoadFirstQuestionUseCase
+import band.effective.hackathon.celestia.feature.quiz.domain.usecase.NavigateToPreviousQuestionUseCase
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
@@ -16,10 +18,14 @@ internal const val TOTAL_QUIZ_QUESTIONS_COUNT = 4
 /**
  * ViewModel for the Quiz feature.
  *
- * @property quizRepository Repository for accessing quiz data
+ * @property loadFirstQuestionUseCase Use case for loading the first question
+ * @property navigateToPreviousQuestionUseCase Use case for navigating to the previous question
+ * @property handleAnswerSelectionUseCase Use case for handling answer selection
  */
 class QuizViewModel(
-    private val quizRepository: QuizRepository
+    private val loadFirstQuestionUseCase: LoadFirstQuestionUseCase,
+    private val navigateToPreviousQuestionUseCase: NavigateToPreviousQuestionUseCase,
+    private val handleAnswerSelectionUseCase: HandleAnswerSelectionUseCase
 ) : ViewModel() {
 
     private val mutableState = MutableStateFlow(QuizState(isLoading = true))
@@ -38,39 +44,31 @@ class QuizViewModel(
     /**
      * Loads the first question of the quiz.
      */
-    private fun loadFirstQuestion() {
-        viewModelScope.launch {
-            try {
-                val questions = quizRepository.getQuestions()
-                if (questions.isNotEmpty()) {
-                    val firstQuestion = questions.first()
-                    // Add first question to history
-                    questionHistory.add(firstQuestion.id)
+    private fun loadFirstQuestion() = viewModelScope.launch {
+        mutableState.update { it.copy(isLoading = true) }
 
-                    mutableState.update {
-                        it.copy(
-                            currentQuestion = firstQuestion,
-                            isLoading = false,
-                            error = null
-                        )
-                    }
-                } else {
-                    mutableState.update {
-                        it.copy(
-                            isLoading = false,
-                            error = "No questions available"
-                        )
-                    }
-                }
-            } catch (e: Exception) {
+        loadFirstQuestionUseCase()
+            .onSuccess { question ->
+                // Add first question to history
+                questionHistory.add(question.id)
+
                 mutableState.update {
                     it.copy(
+                        currentQuestion = question,
                         isLoading = false,
-                        error = "Failed to load questions: ${e.message}"
+                        error = null
                     )
                 }
             }
-        }
+            .onFailure { error ->
+                mutableState.update {
+                    it.copy(
+                        isLoading = false,
+                        error = "Failed to load questions: ${error.message}"
+                    )
+                }
+            }
+
     }
 
     /**
@@ -78,35 +76,31 @@ class QuizViewModel(
      */
     fun onBackPressed() {
         viewModelScope.launch {
-            // Can't go back if we're at the first question or if history is empty
-            if (questionHistory.size <= 1) return@launch
+            mutableState.update { it.copy(isLoading = true) }
 
-            try {
-                // Remove current question from history
-                questionHistory.removeAt(questionHistory.lastIndex)
+            navigateToPreviousQuestionUseCase(questionHistory)
+                .onSuccess { (previousQuestion, updatedHistory) ->
+                    // Update history
+                    questionHistory.clear()
+                    questionHistory.addAll(updatedHistory)
 
-                // Get previous question ID
-                val previousQuestionId = questionHistory.last()
-                val previousQuestion = quizRepository.getQuestionById(previousQuestionId)
-
-                if (previousQuestion != null) {
                     mutableState.update {
                         it.copy(
                             currentQuestion = previousQuestion,
                             isLoading = false,
                             error = null,
-                            step = state.value.step - 1,
+                            step = state.value.step - 1
                         )
                     }
                 }
-            } catch (e: Exception) {
-                mutableState.update {
-                    it.copy(
-                        isLoading = false,
-                        error = "Failed to load previous question: ${e.message}"
-                    )
+                .onFailure { error ->
+                    mutableState.update {
+                        it.copy(
+                            isLoading = false,
+                            error = "Failed to load previous question: ${error.message}"
+                        )
+                    }
                 }
-            }
         }
     }
 
@@ -119,60 +113,45 @@ class QuizViewModel(
         val currentQuestion = state.value.currentQuestion ?: return
 
         viewModelScope.launch {
-            // If this is the last question, complete the quiz
-            if (currentQuestion.id >= TOTAL_QUIZ_QUESTIONS_COUNT) {
-                mutableState.update {
-                    it.copy(
-                        isLoading = true
-                    )
+            mutableState.update { it.copy(isLoading = true) }
+
+            val params = HandleAnswerSelectionUseCase.Params(
+                currentQuestion = currentQuestion,
+                selectedAnswer = answer,
+                questionHistory = questionHistory.toList()
+            )
+
+            handleAnswerSelectionUseCase(params)
+                .onSuccess { output ->
+                    when (output) {
+                        is HandleAnswerSelectionUseCase.Output.NextQuestion -> {
+                            // Update history
+                            questionHistory.clear()
+                            questionHistory.addAll(output.updatedHistory)
+
+                            mutableState.update {
+                                it.copy(
+                                    currentQuestion = output.question,
+                                    isLoading = false,
+                                    error = null,
+                                    step = state.value.step + 1
+                                )
+                            }
+                        }
+
+                        is HandleAnswerSelectionUseCase.Output.QuizCompleted -> {
+                            mutableEffect.emit(QuizEffect.QuizCompleted)
+                        }
+                    }
                 }
-
-                // Mock HTTP request
-                kotlinx.coroutines.delay(2000)
-
-                // Emit navigation effect after loading
-                mutableEffect.emit(QuizEffect.QuizCompleted)
-                return@launch
-            }
-
-            // Otherwise, load the next question
-            try {
-                val nextQuestionId = currentQuestion.id + 1
-                val nextQuestion = quizRepository.getQuestionById(nextQuestionId)
-
-                if (nextQuestion != null) {
-                    // Add next question to history
-                    questionHistory.add(nextQuestion.id)
-
+                .onFailure { error ->
                     mutableState.update {
                         it.copy(
-                            currentQuestion = nextQuestion,
                             isLoading = false,
-                            error = null,
-                            step = state.value.step + 1,
+                            error = "Failed to process answer: ${error.message}"
                         )
                     }
-                } else {
-                    mutableState.update {
-                        it.copy(
-                            isLoading = true
-                        )
-                    }
-
-                    // Mock HTTP request
-                    kotlinx.coroutines.delay(2000)
-
-                    // Emit navigation effect after loading
-                    mutableEffect.emit(QuizEffect.QuizCompleted)
                 }
-            } catch (e: Exception) {
-                mutableState.update {
-                    it.copy(
-                        isLoading = false,
-                        error = "Failed to load next question: ${e.message}"
-                    )
-                }
-            }
         }
     }
 }
