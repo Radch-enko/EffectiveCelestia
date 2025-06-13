@@ -13,42 +13,42 @@ class QuizRepositoryImpl : QuizRepository {
     private val questions = listOf(
         Question(
             id = 1,
-            text = "What is Kotlin?",
+            text = "Что ведёт тебя сквозь тьму?",
             answers = listOf(
-                Answer(1, "A programming language"),
-                Answer(2, "A database system"),
-                Answer(3, "A design pattern"),
-                Answer(4, "A mobile device")
+                Answer(1, "Интуиция"),
+                Answer(2, "Рациональность"),
+                Answer(3, "Любовь"),
+                Answer(4, "Любопытство")
             )
         ),
         Question(
             id = 2,
-            text = "What is Jetpack Compose?",
+            text = "Какой твой ритм во Вселенной?",
             answers = listOf(
-                Answer(1, "A UI toolkit for Android"),
-                Answer(2, "A database library"),
-                Answer(3, "A testing framework"),
-                Answer(4, "A networking library")
+                Answer(1, "Молния"),
+                Answer(2, "Течение"),
+                Answer(3, "Пульс"),
+                Answer(4, "Шёпот")
             )
         ),
         Question(
             id = 3,
-            text = "What is Kotlin Multiplatform?",
+            text = "Где тебе комфортнее?",
             answers = listOf(
-                Answer(1, "A way to share code between platforms"),
-                Answer(2, "A game engine"),
-                Answer(3, "A cloud service"),
-                Answer(4, "A version control system")
+                Answer(1, "Глубины космоса"),
+                Answer(2, "Туманность мечты"),
+                Answer(3, "Полюс света"),
+                Answer(4, "Гравитация Земли")
             )
         ),
         Question(
             id = 4,
-            text = "What is Koin?",
+            text = "Где тебе комфортнее?",
             answers = listOf(
-                Answer(1, "A dependency injection framework"),
-                Answer(2, "A cryptocurrency"),
-                Answer(3, "A UI component library"),
-                Answer(4, "A build system")
+                Answer(1, "Глубины космоса"),
+                Answer(2, "Туманность мечты"),
+                Answer(3, "Полюс света"),
+                Answer(4, "Гравитация Земли")
             )
         )
     )

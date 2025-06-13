@@ -69,10 +69,8 @@ suspend inline fun <reified T> HttpClient.getAsEither(
  * Extension function to safely execute a POST request and wrap the response in Either
  */
 suspend inline fun <reified T> HttpClient.postAsEither(
-    urlString: String,
     crossinline block: suspend HttpClient.() -> HttpResponse
 ): Either<Throwable, T> {
-    Napier.d("Making POST request to $urlString")
     return requestAsEither(block)
 }
 

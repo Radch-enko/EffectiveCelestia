@@ -10,5 +10,5 @@ data class ChatGptError(
     val message: String = "",
     val type: String = "",
     val param: String? = null,
-    val code: String = ""
+    val code: String? = null,
 )

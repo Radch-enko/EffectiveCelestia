@@ -122,7 +122,7 @@ class QuizViewModel(
 
             // Store the user's answer
             val updatedUserAnswers = state.value.userAnswers.toMutableMap().apply {
-                put(currentQuestion.id, answer)
+                put(currentQuestion.text, answer)
             }
 
             mutableState.update {
@@ -171,7 +171,7 @@ class QuizViewModel(
     /**
      * Generates a planet recommendation based on user answers
      */
-    private fun generatePlanetRecommendation(answers: Map<Int, Answer>) {
+    private fun generatePlanetRecommendation(answers: Map<String, Answer>) {
         viewModelScope.launch {
             mutableState.update { it.copy(isLoading = true) }
 
@@ -189,10 +189,10 @@ class QuizViewModel(
                     }
                 },
                 onSuccess = { output ->
-                    Napier.i("QuizViewModel: Successfully generated planet recommendation: ${output.planetName}")
+                    Napier.i("QuizViewModel: Successfully generated planet recommendation: ${output.planet}")
                     mutableState.update {
                         it.copy(
-                            recommendedPlanet = output.planetName,
+                            recommendedPlanet = output.planet.planetName,
                             isLoading = false
                         )
                     }

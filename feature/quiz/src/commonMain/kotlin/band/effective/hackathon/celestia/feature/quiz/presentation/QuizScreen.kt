@@ -81,11 +81,13 @@ private fun QuizScreenContent(
                     BackButton(modifier = Modifier.align(Alignment.CenterStart), onClick = onBackClick)
                 }
 
-                ProgressBar(
-                    modifier = Modifier.align(Alignment.Center).width(120.dp),
-                    currentProgress = state.step.toFloat(),
-                    max = TOTAL_QUIZ_QUESTIONS_COUNT.toFloat(),
-                )
+                if (state.isLoading) {
+                    ProgressBar(
+                        modifier = Modifier.align(Alignment.Center).width(120.dp),
+                        currentProgress = state.step.toFloat(),
+                        max = TOTAL_QUIZ_QUESTIONS_COUNT.toFloat(),
+                    )
+                }
             }
         },
         containerColor = Color.Transparent,

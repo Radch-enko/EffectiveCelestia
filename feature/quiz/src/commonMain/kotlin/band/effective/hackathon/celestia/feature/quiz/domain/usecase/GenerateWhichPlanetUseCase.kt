@@ -3,6 +3,7 @@ package band.effective.hackathon.celestia.feature.quiz.domain.usecase
 import band.effective.hackathon.celestia.core.domain.functional.Either
 import band.effective.hackathon.celestia.feature.quiz.data.model.ChatGptError
 import band.effective.hackathon.celestia.feature.quiz.domain.model.Answer
+import band.effective.hackathon.celestia.feature.quiz.domain.model.RecommendedPlanet
 
 /**
  * Use case for generating a planet recommendation based on user answers.
@@ -17,7 +18,7 @@ interface GenerateWhichPlanetUseCase {
      * @property userAnswers Map of question IDs to selected answers
      */
     data class Params(
-        val userAnswers: Map<Int, Answer>
+        val userAnswers: Map<String, Answer>
     )
 
     /**
@@ -26,6 +27,6 @@ interface GenerateWhichPlanetUseCase {
      * @property planetName The recommended planet name
      */
     data class Output(
-        val planetName: String
+        val planet: RecommendedPlanet
     )
 }
