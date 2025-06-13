@@ -12,9 +12,13 @@ kotlin {
         commonMain.dependencies {
             implementation(project(":core:ui"))
             implementation(project(":core:domain"))
-            implementation(project(":core:ui"))
+            implementation(project(":core:data"))
             implementation(project(":feature:splash"))
             implementation(project(":feature:test"))
+            implementation(libs.koin.core)
+        }
+        androidMain.dependencies {
+            implementation(libs.koin.android)
         }
     }
 }

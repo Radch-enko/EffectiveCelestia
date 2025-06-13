@@ -14,6 +14,7 @@ androidx-navigation = "2.9.0-beta02"
 kotlinx-serialization = "1.8.1"
 coil = "3.2.0"
 multiplatformSettings = "1.3.0"
+koin = "4.0.0"
 
 [libraries]
 
@@ -37,6 +38,8 @@ kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serializa
 coil = { module = "io.coil-kt.coil3:coil-compose-core", version.ref = "coil" }
 coil-network-ktor = { module = "io.coil-kt.coil3:coil-network-ktor3", version.ref = "coil" }
 multiplatformSettings = { module = "com.russhwolf:multiplatform-settings-no-arg", version.ref = "multiplatformSettings" }
+koin-core = { module = "io.insert-koin:koin-core", version.ref="koin" }
+koin-android = { module = "io.insert-koin:koin-android", version.ref="koin" }
 
 androidGradlePlugin = { group = "com.android.tools.build", name = "gradle", version.ref = "agp" }
 kotlinGradlePlugin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kotlin" }
