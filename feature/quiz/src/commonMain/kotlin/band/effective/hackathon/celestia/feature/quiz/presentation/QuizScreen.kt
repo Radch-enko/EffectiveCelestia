@@ -1,14 +1,17 @@
 package band.effective.hackathon.celestia.feature.quiz.presentation
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -24,6 +27,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import band.effective.hackathon.celestia.core.ui.components.button.AnswerOption
+import band.effective.hackathon.celestia.core.ui.components.button.BackButton
+import band.effective.hackathon.celestia.core.ui.components.button.ProgressBar
 import band.effective.hackathon.celestia.feature.quiz.domain.model.Answer
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -37,7 +42,7 @@ import org.koin.compose.viewmodel.koinViewModel
  */
 @Composable
 fun QuizScreen(
-    onQuizCompleted: () -> Unit
+    onQuizCompleted: () -> Unit,
 ) {
     val viewModel = koinViewModel<QuizViewModel>()
     val state by viewModel.state.collectAsState()
@@ -46,9 +51,6 @@ fun QuizScreen(
         viewModel.effect.collect { effect ->
             when (effect) {
                 is QuizEffect.QuizCompleted -> onQuizCompleted()
-                is QuizEffect.NavigateToNextQuestion -> {
-                    // Navigation is handled internally by updating the state
-                }
             }
         }
     }
@@ -56,57 +58,85 @@ fun QuizScreen(
     QuizScreenContent(
         state = state,
         onAnswerSelected = viewModel::onAnswerSelected,
+        onBackClick = viewModel::onBackPressed,
     )
 }
 
 @Composable
-private fun QuizScreenContent(state: QuizState, onAnswerSelected: (Answer) -> Unit) {
-    val coroutineScope = rememberCoroutineScope()
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
-    ) {
-        if (state.isLoading) {
-            CircularProgressIndicator()
-        } else if (state.error != null) {
-            Text(
-                text = state.error ?: "Unknown error",
-                color = MaterialTheme.colorScheme.error,
-                textAlign = TextAlign.Center
-            )
-        } else {
-            state.currentQuestion?.let { question ->
-                // Question text
-                Text(
-                    text = question.text,
-                    style = MaterialTheme.typography.titleLarge,
-                    textAlign = TextAlign.Start,
-                    modifier = Modifier.fillMaxWidth(),
-                    color = Color.White,
+private fun QuizScreenContent(
+    state: QuizState,
+    onAnswerSelected: (Answer) -> Unit,
+    onBackClick: () -> Unit,
+) {
+    Scaffold(
+        topBar = {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(52.dp + 32.dp)
+                    .padding(horizontal = 38.dp, vertical = 16.dp),
+            ) {
+                if (state.step != 0) {
+                    BackButton(modifier = Modifier.align(Alignment.CenterStart), onClick = onBackClick)
+                }
+
+                ProgressBar(
+                    modifier = Modifier.align(Alignment.Center).width(120.dp),
+                    currentProgress = state.step.toFloat(),
+                    max = TOTAL_QUIZ_QUESTIONS_COUNT.toFloat(),
                 )
-
-                Spacer(modifier = Modifier.height(32.dp))
-
-                var selectedItem by remember { mutableStateOf<Answer?>(null) }
-                // Answer options
-                question.answers.forEach { answer ->
-                    AnswerOption(
+            }
+        },
+        containerColor = Color.Transparent,
+        contentColor = Color.Transparent,
+    ) {
+        val coroutineScope = rememberCoroutineScope()
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+        ) {
+            if (state.isLoading) {
+                CircularProgressIndicator()
+            } else if (state.error != null) {
+                Text(
+                    text = state.error ?: "Unknown error",
+                    color = MaterialTheme.colorScheme.error,
+                    textAlign = TextAlign.Center
+                )
+            } else {
+                state.currentQuestion?.let { question ->
+                    // Question text
+                    Text(
+                        text = question.text,
+                        style = MaterialTheme.typography.titleLarge,
+                        textAlign = TextAlign.Start,
                         modifier = Modifier.fillMaxWidth(),
-                        text = answer.text,
-                        isSelected = selectedItem == answer,
-                        onClick = {
-                            coroutineScope.launch {
-                                selectedItem = answer
-                                delay(100)
-                                onAnswerSelected(answer)
-                                selectedItem = null
-                            }
-                        }
+                        color = Color.White,
                     )
-                    Spacer(modifier = Modifier.height(8.dp))
+
+                    Spacer(modifier = Modifier.height(32.dp))
+
+                    var selectedItem by remember { mutableStateOf<Answer?>(null) }
+                    // Answer options
+                    question.answers.forEach { answer ->
+                        AnswerOption(
+                            modifier = Modifier.fillMaxWidth(),
+                            text = answer.text,
+                            isSelected = selectedItem == answer,
+                            onClick = {
+                                coroutineScope.launch {
+                                    selectedItem = answer
+                                    delay(100)
+                                    onAnswerSelected(answer)
+                                    selectedItem = null
+                                }
+                            }
+                        )
+                        Spacer(modifier = Modifier.height(8.dp))
+                    }
                 }
             }
         }
@@ -121,6 +151,7 @@ fun QuizScreenPreview() {
         QuizScreenContent(
             state = QuizState(isLoading = false),
             onAnswerSelected = {},
+            onBackClick = {},
         )
     }
 }

@@ -11,6 +11,8 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
+internal const val TOTAL_QUIZ_QUESTIONS_COUNT = 4
+
 /**
  * ViewModel for the Quiz feature.
  *
@@ -26,7 +28,8 @@ class QuizViewModel(
     private val mutableEffect = MutableSharedFlow<QuizEffect>()
     val effect = mutableEffect.asSharedFlow()
 
-    private val totalQuestions = 4
+    // Store question history to support going back
+    private val questionHistory = mutableListOf<Int>()
 
     init {
         loadFirstQuestion()
@@ -40,9 +43,13 @@ class QuizViewModel(
             try {
                 val questions = quizRepository.getQuestions()
                 if (questions.isNotEmpty()) {
+                    val firstQuestion = questions.first()
+                    // Add first question to history
+                    questionHistory.add(firstQuestion.id)
+
                     mutableState.update {
                         it.copy(
-                            currentQuestion = questions.first(),
+                            currentQuestion = firstQuestion,
                             isLoading = false,
                             error = null
                         )
@@ -67,6 +74,43 @@ class QuizViewModel(
     }
 
     /**
+     * Handles going back to the previous question.
+     */
+    fun onBackPressed() {
+        viewModelScope.launch {
+            // Can't go back if we're at the first question or if history is empty
+            if (questionHistory.size <= 1) return@launch
+
+            try {
+                // Remove current question from history
+                questionHistory.removeAt(questionHistory.lastIndex)
+
+                // Get previous question ID
+                val previousQuestionId = questionHistory.last()
+                val previousQuestion = quizRepository.getQuestionById(previousQuestionId)
+
+                if (previousQuestion != null) {
+                    mutableState.update {
+                        it.copy(
+                            currentQuestion = previousQuestion,
+                            isLoading = false,
+                            error = null,
+                            step = state.value.step - 1,
+                        )
+                    }
+                }
+            } catch (e: Exception) {
+                mutableState.update {
+                    it.copy(
+                        isLoading = false,
+                        error = "Failed to load previous question: ${e.message}"
+                    )
+                }
+            }
+        }
+    }
+
+    /**
      * Handles the selection of an answer.
      *
      * @param answer The selected answer
@@ -76,7 +120,7 @@ class QuizViewModel(
 
         viewModelScope.launch {
             // If this is the last question, complete the quiz
-            if (currentQuestion.id >= totalQuestions) {
+            if (currentQuestion.id >= TOTAL_QUIZ_QUESTIONS_COUNT) {
                 mutableEffect.emit(QuizEffect.QuizCompleted)
                 return@launch
             }
@@ -87,14 +131,17 @@ class QuizViewModel(
                 val nextQuestion = quizRepository.getQuestionById(nextQuestionId)
 
                 if (nextQuestion != null) {
+                    // Add next question to history
+                    questionHistory.add(nextQuestion.id)
+
                     mutableState.update {
                         it.copy(
                             currentQuestion = nextQuestion,
                             isLoading = false,
-                            error = null
+                            error = null,
+                            step = state.value.step + 1,
                         )
                     }
-                    mutableEffect.emit(QuizEffect.NavigateToNextQuestion(nextQuestionId))
                 } else {
                     mutableEffect.emit(QuizEffect.QuizCompleted)
                 }

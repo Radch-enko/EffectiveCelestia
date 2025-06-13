@@ -181,7 +181,7 @@ private fun NavItem(
                 width = BottomNavDimensions.indicatorWidth,
                 height = BottomNavDimensions.indicatorHeight
             )
-            .clickable(onClick = onClick),
+            .clickable(onClick = onClick, indication = null, interactionSource = null),
         contentAlignment = Alignment.Center
     ) {
         Icon(

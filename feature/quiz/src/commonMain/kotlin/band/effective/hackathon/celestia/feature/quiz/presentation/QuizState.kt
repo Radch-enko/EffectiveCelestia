@@ -12,5 +12,6 @@ import band.effective.hackathon.celestia.feature.quiz.domain.model.Question
 data class QuizState(
     val currentQuestion: Question? = null,
     val isLoading: Boolean = false,
-    val error: String? = null
+    val error: String? = null,
+    val step: Int = 0,
 )
