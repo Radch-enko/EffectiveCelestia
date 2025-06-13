@@ -15,7 +15,8 @@ kotlin {
             implementation(project(":core:data"))
             implementation(project(":feature:splash"))
             implementation(project(":feature:test"))
-            implementation(libs.koin.core)
+            implementation(libs.bundles.koin)
+            implementation(libs.androidx.navigation.compose)
         }
         androidMain.dependencies {
             implementation(libs.koin.android)

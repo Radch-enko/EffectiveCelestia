@@ -37,7 +37,6 @@ class MobileCoreUiConventionPlugin : Plugin<Project> {
                             implementation(getLibraryFromLibsToml("coil.network.ktor"))
                             implementation(getLibraryFromLibsToml("multiplatformSettings"))
                             implementation(getLibraryFromLibsToml("androidx.lifecycle.viewmodel"))
-                            implementation(getLibraryFromLibsToml("androidx.lifecycle.viewmodel"))
                             implementation(getLibraryFromLibsToml("androidx.lifecycle.runtime"))
                         }
 

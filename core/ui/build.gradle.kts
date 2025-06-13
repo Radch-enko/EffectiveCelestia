@@ -18,3 +18,9 @@ kotlin {
         }
     }
 }
+
+compose.resources {
+    publicResClass = true
+    packageOfResClass = "band.effective.hackathon.celestia.res"
+    generateResClass = auto
+}

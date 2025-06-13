@@ -1,5 +1,6 @@
 package band.effective.hackaton.celestia.convention
 
+import band.effective.hackaton.celestia.convention.utils.getLibraryFromLibsToml
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.configure
@@ -23,6 +24,9 @@ class MobileFeatureConventionPlugin : Plugin<Project> {
                             implementation(project(":core:data"))
                             implementation(project(":core:domain"))
                             implementation(project(":core:ui"))
+                            implementation(getLibraryFromLibsToml("androidx.lifecycle.viewmodel"))
+                            implementation(getLibraryFromLibsToml("androidx.lifecycle.runtime"))
+                            implementation(foundation)
                         }
                     }
                 }
