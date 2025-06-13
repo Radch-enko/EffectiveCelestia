@@ -27,6 +27,10 @@ class MobileFeatureConventionPlugin : Plugin<Project> {
                             implementation(getLibraryFromLibsToml("androidx.lifecycle.viewmodel"))
                             implementation(getLibraryFromLibsToml("androidx.lifecycle.runtime"))
                             implementation(foundation)
+                            implementation(getLibraryFromLibsToml("coroutines-core"))
+                        }
+                        androidMain.dependencies {
+                            implementation(getLibraryFromLibsToml("coroutines-android"))
                         }
                     }
                 }

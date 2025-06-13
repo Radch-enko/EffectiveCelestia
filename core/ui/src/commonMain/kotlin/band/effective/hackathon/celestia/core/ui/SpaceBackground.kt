@@ -37,7 +37,7 @@ fun SpaceBackground(content: @Composable () -> Unit) {
                 )
             )
     ) {
-        StarryGradientBackground(50)
+        StarryGradientBackground(100)
         Box(modifier = Modifier.systemBarsPadding()) {
             content()
         }
@@ -83,7 +83,7 @@ private fun AnimatedStarsLayer(starCount: Int) {
             // Падение по Y
             launch {
                 while (true) {
-                    val offset = Random.nextFloat() * 20f + 10f // до 30px вниз
+                    val offset = Random.nextFloat() * 20f + 500f // до 30px вниз
                     val duration = Random.nextInt(4000, 8000)
                     star.offsetY.animateTo(
                         offset,

@@ -40,4 +40,4 @@ include(":core:domain")
 include(":core:data")
 include(":feature:splash")
 include(":feature:test")
-
+include(":feature:quiz")

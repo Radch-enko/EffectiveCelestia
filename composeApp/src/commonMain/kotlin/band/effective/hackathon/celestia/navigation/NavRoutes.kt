@@ -6,4 +6,5 @@ package band.effective.hackathon.celestia.navigation
 object NavRoutes {
     const val SPLASH = "splash"
     const val TEST = "test"
+    const val QUIZ = "quiz"
 }

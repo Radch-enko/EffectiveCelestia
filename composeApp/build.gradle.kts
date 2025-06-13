@@ -15,11 +15,15 @@ kotlin {
             implementation(project(":core:data"))
             implementation(project(":feature:splash"))
             implementation(project(":feature:test"))
+            implementation(project(":feature:quiz"))
             implementation(libs.bundles.koin)
             implementation(libs.androidx.navigation.compose)
         }
         androidMain.dependencies {
             implementation(libs.koin.android)
+        }
+        jvmMain.dependencies {
+            runtimeOnly("org.jetbrains.kotlinx:kotlinx-coroutines-swing:1.8.0") // TODO to libs.version.toml
         }
     }
 }
