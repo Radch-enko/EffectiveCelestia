@@ -121,6 +121,16 @@ class QuizViewModel(
         viewModelScope.launch {
             // If this is the last question, complete the quiz
             if (currentQuestion.id >= TOTAL_QUIZ_QUESTIONS_COUNT) {
+                mutableState.update {
+                    it.copy(
+                        isLoading = true
+                    )
+                }
+
+                // Mock HTTP request
+                kotlinx.coroutines.delay(2000)
+
+                // Emit navigation effect after loading
                 mutableEffect.emit(QuizEffect.QuizCompleted)
                 return@launch
             }
@@ -143,6 +153,16 @@ class QuizViewModel(
                         )
                     }
                 } else {
+                    mutableState.update {
+                        it.copy(
+                            isLoading = true
+                        )
+                    }
+
+                    // Mock HTTP request
+                    kotlinx.coroutines.delay(2000)
+
+                    // Emit navigation effect after loading
                     mutableEffect.emit(QuizEffect.QuizCompleted)
                 }
             } catch (e: Exception) {

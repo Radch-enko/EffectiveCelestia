@@ -39,6 +39,7 @@ import org.koin.compose.viewmodel.koinViewModel
  * Composable function that displays the quiz screen.
  *
  * @param onQuizCompleted Callback to be invoked when the quiz is completed
+ * @param onNavigateAfterLoading Callback to be invoked when navigation after loading should happen
  */
 @Composable
 fun QuizScreen(
@@ -99,7 +100,22 @@ private fun QuizScreenContent(
             verticalArrangement = Arrangement.Center
         ) {
             if (state.isLoading) {
-                CircularProgressIndicator()
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center
+                ) {
+                    CircularProgressIndicator(
+                        color = Color.White,
+                        modifier = Modifier.width(48.dp).height(48.dp)
+                    )
+                    Spacer(modifier = Modifier.height(16.dp))
+                    Text(
+                        text = "Генерация ответа...",
+                        style = MaterialTheme.typography.bodyLarge,
+                        color = Color.White,
+                        textAlign = TextAlign.Center
+                    )
+                }
             } else if (state.error != null) {
                 Text(
                     text = state.error ?: "Unknown error",
@@ -150,6 +166,18 @@ fun QuizScreenPreview() {
     MaterialTheme {
         QuizScreenContent(
             state = QuizState(isLoading = false),
+            onAnswerSelected = {},
+            onBackClick = {},
+        )
+    }
+}
+
+@Preview
+@Composable
+fun QuizScreenLoadingPreview() {
+    MaterialTheme {
+        QuizScreenContent(
+            state = QuizState(isLoading = true),
             onAnswerSelected = {},
             onBackClick = {},
         )
