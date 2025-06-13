@@ -16,6 +16,7 @@ class MobileCoreMultiplatformConventionPlugin : Plugin<Project> {
             with(pluginManager) {
                 apply("org.jetbrains.kotlin.multiplatform")
                 apply("com.android.library")
+                apply("kotlinx-serialization")
             }
 
             extensions.configure<KotlinMultiplatformExtension> {

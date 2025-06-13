@@ -1,21 +1,17 @@
 package band.effective.hackathon.celestia.feature.quiz.data.datasource
 
+import band.effective.hackathon.celestia.core.domain.functional.Either
+import band.effective.hackathon.celestia.feature.quiz.data.model.ChatGptError
+
 /**
  * Interface for remote data source operations
  */
 interface RemoteDataSource {
     /**
-     * Fetches data from a remote source
-     * @param endpoint The API endpoint to fetch data from
-     * @return The fetched data as a string
+     * Sends user answers to ChatGPT for analysis
+     * 
+     * @param userAnswers Map of question IDs to selected answers
+     * @return Either containing the analysis from ChatGPT or an error
      */
-    suspend fun fetchData(endpoint: String): String
-    
-    /**
-     * Posts data to a remote source
-     * @param endpoint The API endpoint to post data to
-     * @param data The data to post
-     * @return The response from the remote source as a string
-     */
-    suspend fun postData(endpoint: String, data: String): String
+    suspend fun sendAnswersToChatGpt(userAnswers: Map<Int, String>): Either<ChatGptError, String>
 }

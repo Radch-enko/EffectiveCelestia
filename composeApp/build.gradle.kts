@@ -1,3 +1,4 @@
+import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 import org.jetbrains.compose.reload.ComposeHotRun
 import org.jetbrains.kotlin.compose.compiler.gradle.ComposeFeatureFlag
@@ -5,6 +6,7 @@ import org.jetbrains.kotlin.compose.compiler.gradle.ComposeFeatureFlag
 plugins {
     id("band.effective.hackaton.celestia.convention.application")
     alias(libs.plugins.hotReload)
+    alias(libs.plugins.buildkonfig)
 }
 
 kotlin {
@@ -18,6 +20,7 @@ kotlin {
             implementation(project(":feature:quiz"))
             implementation(libs.bundles.koin)
             implementation(libs.androidx.navigation.compose)
+            implementation(libs.napier)
         }
         androidMain.dependencies {
             implementation(libs.koin.android)
@@ -57,4 +60,18 @@ composeCompiler {
 }
 tasks.withType<ComposeHotRun>().configureEach {
     mainClass.set("MainKt")
+}
+
+val chatGPTApiKey: String = gradleLocalProperties(rootDir, providers).getProperty("chatgpt.api.key")
+
+buildkonfig {
+    packageName = "band.effective.hackathon.celestia"
+    exposeObjectWithName = "BuildKonfig"
+    defaultConfigs {
+        buildConfigField(
+            com.codingfeline.buildkonfig.compiler.FieldSpec.Type.STRING,
+            "CHATGPT_API_KEY",
+            chatGPTApiKey,
+        )
+    }
 }

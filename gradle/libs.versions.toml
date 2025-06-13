@@ -16,6 +16,8 @@ coil = "3.2.0"
 multiplatformSettings = "1.3.0"
 koin = "4.1.0"
 coroutines = "1.10.2"
+napier = "2.7.1"
+buildkonfig = "0.15.1"
 
 [libraries]
 
@@ -46,6 +48,7 @@ koin-compose-viewmodel-navigation = { module = "io.insert-koin:koin-compose-view
 koin-android = { module = "io.insert-koin:koin-android", version.ref = "koin" }
 coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines" }
 coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "coroutines" }
+napier = { module = "io.github.aakira:napier", version.ref = "napier" }
 
 androidGradlePlugin = { group = "com.android.tools.build", name = "gradle", version.ref = "agp" }
 kotlinGradlePlugin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kotlin" }
@@ -60,6 +63,7 @@ compose = { id = "org.jetbrains.compose", version.ref = "compose" }
 android-application = { id = "com.android.application", version.ref = "agp" }
 hotReload = { id = "org.jetbrains.compose.hot-reload", version.ref = "hotReload" }
 kotlinx-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
+buildkonfig = { id = "com.codingfeline.buildkonfig", version.ref = "buildkonfig" }
 
 [bundles]
 koin = ["koin-core", "koin-compose", "koin-compose-viewmodel", "koin-compose-viewmodel-navigation"]

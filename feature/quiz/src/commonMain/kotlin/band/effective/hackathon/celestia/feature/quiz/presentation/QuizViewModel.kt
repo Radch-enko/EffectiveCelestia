@@ -2,10 +2,13 @@ package band.effective.hackathon.celestia.feature.quiz.presentation
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import band.effective.hackathon.celestia.core.domain.functional.fold
 import band.effective.hackathon.celestia.feature.quiz.domain.model.Answer
+import band.effective.hackathon.celestia.feature.quiz.domain.usecase.GenerateWhichPlanetUseCase
 import band.effective.hackathon.celestia.feature.quiz.domain.usecase.HandleAnswerSelectionUseCase
 import band.effective.hackathon.celestia.feature.quiz.domain.usecase.LoadFirstQuestionUseCase
 import band.effective.hackathon.celestia.feature.quiz.domain.usecase.NavigateToPreviousQuestionUseCase
+import io.github.aakira.napier.Napier
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
@@ -18,14 +21,16 @@ internal const val TOTAL_QUIZ_QUESTIONS_COUNT = 4
 /**
  * ViewModel for the Quiz feature.
  *
- * @property loadFirstQuestionUseCase Use case for loading the first question
- * @property navigateToPreviousQuestionUseCase Use case for navigating to the previous question
- * @property handleAnswerSelectionUseCase Use case for handling answer selection
+ * @property loadFirstQuestionUseCase Usecase for loading the first question
+ * @property navigateToPreviousQuestionUseCase Usecase for navigating to the previous question
+ * @property handleAnswerSelectionUseCase Usecase for handling answer selection
+ * @property generateWhichPlanetUseCase Usecase for generating planet recommendations
  */
 class QuizViewModel(
     private val loadFirstQuestionUseCase: LoadFirstQuestionUseCase,
     private val navigateToPreviousQuestionUseCase: NavigateToPreviousQuestionUseCase,
-    private val handleAnswerSelectionUseCase: HandleAnswerSelectionUseCase
+    private val handleAnswerSelectionUseCase: HandleAnswerSelectionUseCase,
+    private val generateWhichPlanetUseCase: GenerateWhichPlanetUseCase,
 ) : ViewModel() {
 
     private val mutableState = MutableStateFlow(QuizState(isLoading = true))
@@ -115,6 +120,15 @@ class QuizViewModel(
         viewModelScope.launch {
             mutableState.update { it.copy(isLoading = true) }
 
+            // Store the user's answer
+            val updatedUserAnswers = state.value.userAnswers.toMutableMap().apply {
+                put(currentQuestion.id, answer)
+            }
+
+            mutableState.update {
+                it.copy(userAnswers = updatedUserAnswers)
+            }
+
             val params = HandleAnswerSelectionUseCase.Params(
                 currentQuestion = currentQuestion,
                 selectedAnswer = answer,
@@ -139,9 +153,8 @@ class QuizViewModel(
                             }
                         }
 
-                        is HandleAnswerSelectionUseCase.Output.QuizCompleted -> {
-                            mutableEffect.emit(QuizEffect.QuizCompleted)
-                        }
+                        is HandleAnswerSelectionUseCase.Output.QuizCompleted ->
+                            generatePlanetRecommendation(state.value.userAnswers)
                     }
                 }
                 .onFailure { error ->
@@ -152,6 +165,39 @@ class QuizViewModel(
                         )
                     }
                 }
+        }
+    }
+
+    /**
+     * Generates a planet recommendation based on user answers
+     */
+    private fun generatePlanetRecommendation(answers: Map<Int, Answer>) {
+        viewModelScope.launch {
+            mutableState.update { it.copy(isLoading = true) }
+
+            val params = GenerateWhichPlanetUseCase.Params(
+                userAnswers = answers
+            )
+
+            generateWhichPlanetUseCase(params).fold(
+                onError = { error ->
+                    mutableState.update {
+                        it.copy(
+                            isLoading = false,
+                            error = "Failed to generate planet recommendation: ${error.message}"
+                        )
+                    }
+                },
+                onSuccess = { output ->
+                    Napier.i("QuizViewModel: Successfully generated planet recommendation: ${output.planetName}")
+                    mutableState.update {
+                        it.copy(
+                            recommendedPlanet = output.planetName,
+                            isLoading = false
+                        )
+                    }
+                }
+            )
         }
     }
 }

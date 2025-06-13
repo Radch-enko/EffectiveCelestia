@@ -28,6 +28,8 @@ class MobileFeatureConventionPlugin : Plugin<Project> {
                             implementation(getLibraryFromLibsToml("androidx.lifecycle.runtime"))
                             implementation(foundation)
                             implementation(getLibraryFromLibsToml("coroutines-core"))
+                            implementation(getLibraryFromLibsToml("ktor.serialization.json"))
+
                         }
                         androidMain.dependencies {
                             implementation(getLibraryFromLibsToml("coroutines-android"))

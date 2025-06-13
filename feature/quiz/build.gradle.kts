@@ -7,6 +7,7 @@ kotlin {
         commonMain.dependencies {
             implementation(libs.bundles.koin)
             implementation(libs.ktor.client.core)
+            implementation(libs.napier)
         }
 
         androidMain.dependencies {
