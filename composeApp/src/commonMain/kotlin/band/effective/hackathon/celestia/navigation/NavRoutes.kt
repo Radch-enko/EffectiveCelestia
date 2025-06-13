@@ -6,6 +6,20 @@ package band.effective.hackathon.celestia.navigation
 object NavRoutes {
     const val SPLASH = "splash"
     const val TEST = "test"
+
+    // Root destinations
     const val QUIZ = "quiz"
     const val ABOUT_US = "about_us"
+
+    // Nested routes
+    object Quiz {
+        const val ROUTE = QUIZ
+        const val QUIZ_SCREEN = "$ROUTE/quiz_screen"
+        const val TEST_SCREEN = "$ROUTE/test_screen"
+    }
+
+    object AboutUs {
+        const val ROUTE = ABOUT_US
+        const val ABOUT_US_SCREEN = "$ROUTE/about_us_screen"
+    }
 }

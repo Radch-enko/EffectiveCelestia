@@ -6,6 +6,7 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.navigation
 import band.effective.hackathon.celestia.feature.quiz.presentation.QuizScreen
 import band.effective.hackathon.celestia.feature.splash.presentation.SplashScreen
 import band.effective.hackathon.celestia.feature.test.presentation.TestScreen
@@ -30,20 +31,30 @@ fun NavGraph(navController: NavHostController, startDestination: String = NavRou
             })
         }
 
-        composable(NavRoutes.TEST) {
-            TestScreen()
+        // Quiz nested navigation
+        navigation(
+            startDestination = NavRoutes.Quiz.QUIZ_SCREEN,
+            route = NavRoutes.Quiz.ROUTE
+        ) {
+            composable(NavRoutes.Quiz.QUIZ_SCREEN) {
+                QuizScreen(onQuizCompleted = {
+                    navController.navigate(NavRoutes.Quiz.TEST_SCREEN)
+                })
+            }
+
+            composable(NavRoutes.Quiz.TEST_SCREEN) {
+                TestScreen()
+            }
         }
 
-        composable(NavRoutes.QUIZ) {
-            QuizScreen(onQuizCompleted = {
-                navController.navigate(NavRoutes.TEST) {
-                    popUpTo(NavRoutes.QUIZ) { inclusive = true }
-                }
-            })
-        }
-
-        composable(NavRoutes.ABOUT_US) {
-            AboutUsScreen()
+        // About Us nested navigation
+        navigation(
+            startDestination = NavRoutes.AboutUs.ABOUT_US_SCREEN,
+            route = NavRoutes.AboutUs.ROUTE
+        ) {
+            composable(NavRoutes.AboutUs.ABOUT_US_SCREEN) {
+                AboutUsScreen()
+            }
         }
     }
 }
