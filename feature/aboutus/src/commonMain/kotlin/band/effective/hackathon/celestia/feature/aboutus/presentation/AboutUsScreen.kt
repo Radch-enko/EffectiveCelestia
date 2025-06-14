@@ -111,7 +111,6 @@ internal fun AboutUsScreenContent(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(16.dp),
-                verticalArrangement = Arrangement.spacedBy(16.dp)
             ) {
                 // Title
                 Text(
