@@ -54,13 +54,6 @@ class KtorRemoteDataSource(
         val formattedAnswers = userAnswers.entries.joinToString("\n") { (questionId, answerText) ->
             "$questionId: $answerText"
         }
-        return success(
-            RecommendedPlanetDto(
-                planetName = "Ты — звезда Сириус",
-                description = "Яркий ориентир на ночном небе. Чистый, холодный свет, будто зов \u2028из другого измерения. В этом сиянии — сила, ясность и присутствие.",
-                type = Random.nextInt(1, 3)
-            )
-        )
         // Create the request body
         val requestBody = GptRequest(
             modelUri = "gpt://$gptModel/yandexgpt",
