@@ -1,5 +1,6 @@
 package band.effective.hackathon.celestia.core.ui.components.button
 
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
@@ -18,9 +19,14 @@ fun CelestiaButton(
 ) {
     Button(
         onClick = onClick,
-        modifier = modifier,
+        modifier = modifier
+            .border(1.dp, Color.White, RoundedCornerShape(18.dp))
+            .padding(),
         colors = ButtonDefaults.buttonColors(
-            containerColor = Color(0x14FFFFFF),
+            containerColor = Color.Transparent,
+            contentColor = Color.Transparent,
+            disabledContentColor = Color.Transparent,
+            disabledContainerColor = Color.Transparent,
         ),
         shape = RoundedCornerShape(18.dp),
         elevation = null,

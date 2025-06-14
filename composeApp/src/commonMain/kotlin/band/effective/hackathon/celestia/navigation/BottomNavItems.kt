@@ -13,7 +13,10 @@ object BottomNavItems {
             route = NavRoutes.Quiz.QUIZ_SCREEN,
             title = "Quiz",
             icon = Res.drawable.ic_quiz,
-            contentDescription = "Quiz"
+            contentDescription = "Quiz",
+            associatedRoutes = listOf(
+                NavRoutes.Quiz.PLANET_SCREEN,
+            )
         ),
         BottomNavItem(
             route = NavRoutes.AboutUs.ABOUT_US_SCREEN,

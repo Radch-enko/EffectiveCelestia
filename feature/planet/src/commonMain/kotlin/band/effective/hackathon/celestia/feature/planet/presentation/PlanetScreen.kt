@@ -1,7 +1,10 @@
 package band.effective.hackathon.celestia.feature.planet.presentation
 
+import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.tween
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -9,7 +12,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -18,12 +20,22 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import band.effective.hackathon.celestia.core.domain.model.RecommendedPlanet
+import band.effective.hackathon.celestia.core.ui.components.button.CelestiaButton
+import effectivecelestia.feature.planet.generated.resources.Res
+import effectivecelestia.feature.planet.generated.resources.blue
+import effectivecelestia.feature.planet.generated.resources.light_blue
+import effectivecelestia.feature.planet.generated.resources.yellow
+import kotlinx.coroutines.launch
+import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -48,7 +60,9 @@ fun PlanetScreen(
     LaunchedEffect(Unit) {
         viewModel.effect.collect { effect ->
             when (effect) {
-                is PlanetEffect.RestartQuiz -> onRestartQuiz()
+                is PlanetEffect.RestartQuiz -> {
+                    onRestartQuiz()
+                }
             }
         }
     }
@@ -78,7 +92,7 @@ private fun PlanetScreenContent(
             if (state.isLoading) {
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.Center
+                    verticalArrangement = Arrangement.Center,
                 ) {
                     CircularProgressIndicator(
                         color = Color.White,
@@ -103,18 +117,18 @@ private fun PlanetScreenContent(
                     // Planet title
                     Text(
                         text = planet.planetName,
-                        style = MaterialTheme.typography.headlineLarge,
-                        textAlign = TextAlign.Center,
+                        style = MaterialTheme.typography.titleLarge,
+                        textAlign = TextAlign.Start,
                         modifier = Modifier.fillMaxWidth(),
                         color = Color.White,
                     )
 
-                    Spacer(modifier = Modifier.height(32.dp))
+                    Spacer(modifier = Modifier.height(18.dp))
 
                     // Planet description
                     Text(
                         text = planet.description,
-                        style = MaterialTheme.typography.bodyLarge,
+                        style = MaterialTheme.typography.bodyMedium,
                         textAlign = TextAlign.Start,
                         modifier = Modifier.fillMaxWidth(),
                         color = Color.White,
@@ -122,13 +136,67 @@ private fun PlanetScreenContent(
 
                     Spacer(modifier = Modifier.height(32.dp))
 
-                    // Restart quiz button
-                    Button(
-                        onClick = onRestartQuizClick,
-                        modifier = Modifier.fillMaxWidth()
-                    ) {
-                        Text("Restart Quiz")
+                    val animatedAlpha by remember { mutableStateOf(Animatable(0f)) }
+                    val animatedOffsetX = remember { Animatable(300f) } // справа
+                    val animatedOffsetY = remember { Animatable(-300f) } // сверху
+                    val animatedScale = remember { Animatable(0f) }
+
+                    LaunchedEffect(state.planet.planetName) {
+                        animatedAlpha.snapTo(0f)
+                        animatedOffsetX.snapTo(300f)
+                        animatedOffsetY.snapTo(-300f)
+                        animatedScale.snapTo(0f)
+
+                        launch {
+                            animatedAlpha.animateTo(
+                                targetValue = 1f,
+                                animationSpec = tween(durationMillis = 1000, easing = FastOutSlowInEasing)
+                            )
+                        }
+                        launch {
+                            animatedOffsetX.animateTo(
+                                targetValue = 0f,
+                                animationSpec = tween(durationMillis = 1000, easing = FastOutSlowInEasing)
+                            )
+                        }
+                        launch {
+                            animatedOffsetY.animateTo(
+                                targetValue = 0f,
+                                animationSpec = tween(durationMillis = 1000, easing = FastOutSlowInEasing)
+                            )
+                        }
+                        launch {
+                            animatedScale.animateTo(
+                                targetValue = 1f,
+                                animationSpec = tween(durationMillis = 1000, easing = FastOutSlowInEasing)
+                            )
+                        }
                     }
+
+                    Image(
+                        painter = painterResource(
+                            when (planet.type) {
+                                1 -> Res.drawable.yellow
+                                2 -> Res.drawable.light_blue
+                                3 -> Res.drawable.blue
+                                else -> Res.drawable.yellow
+                            }
+                        ),
+                        contentDescription = null,
+                        modifier = Modifier
+                            .graphicsLayer {
+                                alpha = animatedAlpha.value
+                                scaleX = animatedScale.value
+                                scaleY = animatedScale.value
+                                translationX = animatedOffsetX.value
+                            }
+                    )
+
+                    CelestiaButton(
+                        onClick = onRestartQuizClick,
+                        modifier = Modifier.fillMaxWidth(),
+                        text = "Пройти ещё раз"
+                    )
                 }
             }
         }

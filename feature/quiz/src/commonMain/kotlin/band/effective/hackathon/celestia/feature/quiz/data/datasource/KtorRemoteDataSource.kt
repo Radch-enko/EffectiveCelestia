@@ -24,6 +24,7 @@ import io.ktor.http.ContentType
 import io.ktor.http.HttpHeaders
 import io.ktor.http.contentType
 import io.ktor.utils.io.InternalAPI
+import kotlin.random.Random
 import kotlinx.serialization.json.Json
 
 private const val GPT_REQUEST_URL = "https://llm.api.cloud.yandex.net/foundationModels/v1/completion"
@@ -57,7 +58,7 @@ class KtorRemoteDataSource(
             RecommendedPlanetDto(
                 planetName = "Test planet name",
                 description = "Planet description",
-                type = 1,
+                type = Random.nextInt(1, 3)
             )
         )
         // Create the request body

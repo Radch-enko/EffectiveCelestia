@@ -19,6 +19,8 @@ object NavRoutes {
         const val QUIZ_SCREEN = "$ROUTE/quiz_screen"
         const val TEST_SCREEN = "$ROUTE/test_screen"
 
+        const val PLANET_SCREEN = "NavRoutes.Quiz.Planet"
+
         @Serializable
         data class Planet(
             val planetName: String,
