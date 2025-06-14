@@ -167,7 +167,7 @@ private fun PlanetScreenContent(
                         }
                         launch {
                             animatedScale.animateTo(
-                                targetValue = 1f,
+                                targetValue = 1.8f,
                                 animationSpec = tween(durationMillis = 1000, easing = FastOutSlowInEasing)
                             )
                         }

@@ -26,10 +26,8 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
-import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.currentBackStackEntryAsState
-import io.github.aakira.napier.Napier
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.vectorResource
 
@@ -155,12 +153,11 @@ private fun BottomNavContainer(
             verticalAlignment = Alignment.CenterVertically
         ) {
             navItems.forEachIndexed { index, item ->
-                Napier.d { "currentDestination?.route: ${currentDestination?.route} | item.associatedRoutes: ${item.associatedRoutes}" }
                 NavItem(
                     item = item,
                     isSelected = currentDestination?.route == item.route || item.associatedRoutes.any {
                         currentDestination?.route.orEmpty().contains(it)
-                    } ,
+                    },
                     onClick = { onItemClick(item.route) }
                 )
 

@@ -56,8 +56,8 @@ class KtorRemoteDataSource(
         }
         return success(
             RecommendedPlanetDto(
-                planetName = "Test planet name",
-                description = "Planet description",
+                planetName = "Ты — звезда Сириус",
+                description = "Яркий ориентир на ночном небе. Чистый, холодный свет, будто зов \u2028из другого измерения. В этом сиянии — сила, ясность и присутствие.",
                 type = Random.nextInt(1, 3)
             )
         )

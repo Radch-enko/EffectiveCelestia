@@ -36,9 +36,19 @@ import band.effective.hackathon.celestia.res.MuseoSansCyrl_700
 import effectivecelestia.feature.aboutus.generated.resources.Res
 import effectivecelestia.feature.aboutus.generated.resources.about_us_aleksandra
 import effectivecelestia.feature.aboutus.generated.resources.about_us_stas
+import effectivecelestia.feature.aboutus.generated.resources.aboutus_description
+import effectivecelestia.feature.aboutus.generated.resources.aboutus_name_alexandra
+import effectivecelestia.feature.aboutus.generated.resources.aboutus_name_stanislav
+import effectivecelestia.feature.aboutus.generated.resources.aboutus_role_designer
+import effectivecelestia.feature.aboutus.generated.resources.aboutus_role_software_engineer
+import effectivecelestia.feature.aboutus.generated.resources.aboutus_telegram_alexandra
+import effectivecelestia.feature.aboutus.generated.resources.aboutus_telegram_stanislav
+import effectivecelestia.feature.aboutus.generated.resources.aboutus_title
+import effectivecelestia.feature.aboutus.generated.resources.aboutus_vote_button
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.Font
 import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -105,7 +115,7 @@ internal fun AboutUsScreenContent(
             ) {
                 // Title
                 Text(
-                    text = "О нас",
+                    text = stringResource(Res.string.aboutus_title),
                     style = MaterialTheme.typography.headlineLarge,
                     color = Color.White,
                     textAlign = TextAlign.Start,
@@ -120,16 +130,16 @@ internal fun AboutUsScreenContent(
 
                 // Team member cards
                 TeamMemberCard(
-                    name = "Станислав Радченко",
-                    role = "Software Engineer",
-                    telegramTag = "@StanislavRadchenko",
+                    name = stringResource(Res.string.aboutus_name_stanislav),
+                    role = stringResource(Res.string.aboutus_role_software_engineer),
+                    telegramTag = stringResource(Res.string.aboutus_telegram_stanislav),
                     image = Res.drawable.about_us_stas,
                 )
 
                 TeamMemberCard(
-                    name = "Александра Корытова",
-                    role = "UI/UX Designer",
-                    telegramTag = "@alesrkt",
+                    name = stringResource(Res.string.aboutus_name_alexandra),
+                    role = stringResource(Res.string.aboutus_role_designer),
+                    telegramTag = stringResource(Res.string.aboutus_telegram_alexandra),
                     image = Res.drawable.about_us_aleksandra,
                 )
 
@@ -137,7 +147,7 @@ internal fun AboutUsScreenContent(
 
                 // Vote button
                 CelestiaButton(
-                    text = "Vote for us",
+                    text = stringResource(Res.string.aboutus_vote_button),
                     onClick = onVoteClick,
                     modifier = Modifier
                         .fillMaxWidth()
@@ -196,10 +206,7 @@ private fun TeamMemberCard(
 
 @Composable
 fun Description() {
-    val text =
-        "*Effective Celestia* — это хакатонный проект, в котором мы соединили технологии и немного космической поэзии.\n" +
-                "Мы сделали это, чтобы напомнить: *каждый сияет по-своему*."
-
+    val text = stringResource(Res.string.aboutus_description)
     Text(
         text = buildAnnotatedString {
             val regex = Regex("\\*(.*?)\\*")
@@ -227,7 +234,7 @@ fun Description() {
             }
         },
         style = MaterialTheme.typography.bodyLarge,
-        color = Color.White
+        color = Color.White,
     )
 }
 

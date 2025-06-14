@@ -26,13 +26,17 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import band.effective.hackathon.celestia.core.domain.model.RecommendedPlanet
 import band.effective.hackathon.celestia.core.ui.components.button.AnswerOption
 import band.effective.hackathon.celestia.core.ui.components.button.BackButton
 import band.effective.hackathon.celestia.core.ui.components.button.ProgressBar
-import band.effective.hackathon.celestia.core.domain.model.RecommendedPlanet
 import band.effective.hackathon.celestia.feature.quiz.domain.model.Answer
+import effectivecelestia.feature.quiz.generated.resources.Res
+import effectivecelestia.feature.quiz.generated.resources.quiz_generating_answer
+import effectivecelestia.feature.quiz.generated.resources.quiz_unknown_error
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -113,7 +117,7 @@ private fun QuizScreenContent(
                     )
                     Spacer(modifier = Modifier.height(16.dp))
                     Text(
-                        text = "Генерация ответа...",
+                        text = stringResource(Res.string.quiz_generating_answer),
                         style = MaterialTheme.typography.bodyLarge,
                         color = Color.White,
                         textAlign = TextAlign.Center
@@ -121,7 +125,7 @@ private fun QuizScreenContent(
                 }
             } else if (state.error != null) {
                 Text(
-                    text = state.error ?: "Unknown error",
+                    text = state.error ?: stringResource(Res.string.quiz_unknown_error),
                     color = MaterialTheme.colorScheme.error,
                     textAlign = TextAlign.Center
                 )
