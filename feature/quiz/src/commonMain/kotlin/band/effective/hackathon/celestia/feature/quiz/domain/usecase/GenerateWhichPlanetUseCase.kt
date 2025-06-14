@@ -3,7 +3,7 @@ package band.effective.hackathon.celestia.feature.quiz.domain.usecase
 import band.effective.hackathon.celestia.core.domain.functional.Either
 import band.effective.hackathon.celestia.feature.quiz.domain.model.Answer
 import band.effective.hackathon.celestia.feature.quiz.domain.model.GptError
-import band.effective.hackathon.celestia.feature.quiz.domain.model.RecommendedPlanet
+import band.effective.hackathon.celestia.core.domain.model.RecommendedPlanet
 
 /**
  * Use case for generating a planet recommendation based on user answers.

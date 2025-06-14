@@ -6,7 +6,7 @@ import band.effective.hackathon.celestia.core.domain.functional.mapError
 import band.effective.hackathon.celestia.feature.quiz.data.datasource.RemoteDataSource
 import band.effective.hackathon.celestia.feature.quiz.data.mapper.GptDomainMapper
 import band.effective.hackathon.celestia.feature.quiz.domain.model.GptError
-import band.effective.hackathon.celestia.feature.quiz.domain.model.RecommendedPlanet
+import band.effective.hackathon.celestia.core.domain.model.RecommendedPlanet
 import band.effective.hackathon.celestia.feature.quiz.domain.repository.GPTRepository
 
 /**

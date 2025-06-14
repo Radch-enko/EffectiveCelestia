@@ -1,5 +1,7 @@
 package band.effective.hackathon.celestia.navigation
 
+import kotlinx.serialization.Serializable
+
 /**
  * Navigation routes for the app
  */
@@ -16,6 +18,13 @@ object NavRoutes {
         const val ROUTE = QUIZ
         const val QUIZ_SCREEN = "$ROUTE/quiz_screen"
         const val TEST_SCREEN = "$ROUTE/test_screen"
+
+        @Serializable
+        data class Planet(
+            val planetName: String,
+            val description: String,
+            val type: Int,
+        )
     }
 
     object AboutUs {

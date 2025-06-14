@@ -29,6 +29,7 @@ import androidx.compose.ui.unit.dp
 import band.effective.hackathon.celestia.core.ui.components.button.AnswerOption
 import band.effective.hackathon.celestia.core.ui.components.button.BackButton
 import band.effective.hackathon.celestia.core.ui.components.button.ProgressBar
+import band.effective.hackathon.celestia.core.domain.model.RecommendedPlanet
 import band.effective.hackathon.celestia.feature.quiz.domain.model.Answer
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -43,7 +44,7 @@ import org.koin.compose.viewmodel.koinViewModel
  */
 @Composable
 fun QuizScreen(
-    onQuizCompleted: () -> Unit,
+    onQuizCompleted: (RecommendedPlanet) -> Unit,
 ) {
     val viewModel = koinViewModel<QuizViewModel>()
     val state by viewModel.state.collectAsState()
@@ -51,7 +52,7 @@ fun QuizScreen(
     LaunchedEffect(Unit) {
         viewModel.effect.collect { effect ->
             when (effect) {
-                is QuizEffect.QuizCompleted -> onQuizCompleted()
+                is QuizEffect.QuizCompleted -> onQuizCompleted(effect.planet)
             }
         }
     }

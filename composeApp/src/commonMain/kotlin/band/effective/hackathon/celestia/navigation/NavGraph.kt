@@ -6,10 +6,15 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.navOptions
 import androidx.navigation.navigation
+import androidx.navigation.toRoute
+import band.effective.hackathon.celestia.feature.planet.presentation.PlanetScreen
 import band.effective.hackathon.celestia.feature.quiz.presentation.QuizScreen
 import band.effective.hackathon.celestia.feature.splash.presentation.SplashScreen
 import band.effective.hackathon.celestia.feature.test.presentation.TestScreen
+import band.effective.hackathon.celestia.mapper.toNavArgument
+import band.effective.hackathon.celestia.mapper.toRecommendedPlanet
 import band.effective.hackathon.celestia.screens.AboutUsScreen
 
 /**
@@ -37,13 +42,26 @@ fun NavGraph(navController: NavHostController, startDestination: String = NavRou
             route = NavRoutes.Quiz.ROUTE
         ) {
             composable(NavRoutes.Quiz.QUIZ_SCREEN) {
-                QuizScreen(onQuizCompleted = {
-                    navController.navigate(NavRoutes.Quiz.TEST_SCREEN)
+                QuizScreen(onQuizCompleted = { planet ->
+                    navController.navigate(planet.toNavArgument(), navOptions = navOptions {
+                        popUpTo(NavRoutes.Quiz.QUIZ_SCREEN) { inclusive = true }
+                    })
                 })
             }
 
             composable(NavRoutes.Quiz.TEST_SCREEN) {
                 TestScreen()
+            }
+
+            composable<NavRoutes.Quiz.Planet> { backStackEntry ->
+                PlanetScreen(
+                    planet = backStackEntry.toRoute<NavRoutes.Quiz.Planet>().toRecommendedPlanet(),
+                    onRestartQuiz = {
+                        navController.navigate(NavRoutes.Quiz.QUIZ_SCREEN) {
+                            popUpTo(NavRoutes.Quiz.QUIZ_SCREEN) { inclusive = true }
+                        }
+                    }
+                )
             }
         }
 

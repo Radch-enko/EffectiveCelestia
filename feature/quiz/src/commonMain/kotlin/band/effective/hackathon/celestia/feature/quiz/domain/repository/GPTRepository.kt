@@ -2,7 +2,7 @@ package band.effective.hackathon.celestia.feature.quiz.domain.repository
 
 import band.effective.hackathon.celestia.core.domain.functional.Either
 import band.effective.hackathon.celestia.feature.quiz.domain.model.GptError
-import band.effective.hackathon.celestia.feature.quiz.domain.model.RecommendedPlanet
+import band.effective.hackathon.celestia.core.domain.model.RecommendedPlanet
 
 /**
  * Repository interface for interacting with ChatGPT

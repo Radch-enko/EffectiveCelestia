@@ -8,7 +8,6 @@ import band.effective.hackathon.celestia.feature.quiz.domain.usecase.GenerateWhi
 import band.effective.hackathon.celestia.feature.quiz.domain.usecase.HandleAnswerSelectionUseCase
 import band.effective.hackathon.celestia.feature.quiz.domain.usecase.LoadFirstQuestionUseCase
 import band.effective.hackathon.celestia.feature.quiz.domain.usecase.NavigateToPreviousQuestionUseCase
-import io.github.aakira.napier.Napier
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
@@ -189,13 +188,6 @@ class QuizViewModel(
                     }
                 },
                 onSuccess = { output ->
-                    Napier.i("QuizViewModel: Successfully generated planet recommendation: ${output.planet}")
-                    mutableState.update {
-                        it.copy(
-                            recommendedPlanet = output.planet.planetName,
-                            isLoading = false,
-                        )
-                    }
                     mutableEffect.emit(QuizEffect.QuizCompleted(output.planet))
                 }
             )

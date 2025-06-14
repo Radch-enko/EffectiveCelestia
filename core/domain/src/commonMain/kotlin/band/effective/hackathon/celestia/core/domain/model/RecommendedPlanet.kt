@@ -1,4 +1,4 @@
-package band.effective.hackathon.celestia.feature.quiz.domain.model
+package band.effective.hackathon.celestia.core.domain.model
 
 data class RecommendedPlanet(
     val planetName: String,

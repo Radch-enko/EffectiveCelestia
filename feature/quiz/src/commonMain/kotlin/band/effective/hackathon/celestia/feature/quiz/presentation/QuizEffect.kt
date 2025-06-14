@@ -1,6 +1,6 @@
 package band.effective.hackathon.celestia.feature.quiz.presentation
 
-import band.effective.hackathon.celestia.feature.quiz.domain.model.RecommendedPlanet
+import band.effective.hackathon.celestia.core.domain.model.RecommendedPlanet
 
 /**
  * Represents UI effects for the Quiz feature.

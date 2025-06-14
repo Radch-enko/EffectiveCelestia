@@ -3,7 +3,7 @@ package band.effective.hackathon.celestia.feature.quiz.data.mapper
 import band.effective.hackathon.celestia.feature.quiz.data.model.GptErrorDto
 import band.effective.hackathon.celestia.feature.quiz.data.model.RecommendedPlanetDto
 import band.effective.hackathon.celestia.feature.quiz.domain.model.GptError
-import band.effective.hackathon.celestia.feature.quiz.domain.model.RecommendedPlanet
+import band.effective.hackathon.celestia.core.domain.model.RecommendedPlanet
 
 class GptDomainMapper {
 

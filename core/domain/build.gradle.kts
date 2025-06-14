@@ -1,5 +1,6 @@
 plugins {
     id("band.effective.hackaton.celestia.convention.coremultiplatform")
+    id(libs.plugins.kotlinx.serialization.get().pluginId)
 }
 
 kotlin {

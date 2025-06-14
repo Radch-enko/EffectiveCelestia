@@ -20,6 +20,4 @@ data class QuizState(
     val error: String? = null,
     val step: Int = 0,
     val userAnswers: Map<String, Answer> = emptyMap(),
-    val chatGptResult: String? = null,
-    val recommendedPlanet: String? = null,
 )
