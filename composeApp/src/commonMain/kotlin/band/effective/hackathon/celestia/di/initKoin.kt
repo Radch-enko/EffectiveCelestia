@@ -2,6 +2,7 @@ package band.effective.hackathon.celestia.di
 
 import band.effective.hackathon.celestia.BuildKonfig
 import band.effective.hackathon.celestia.core.data.di.getNetworkModules
+import band.effective.hackathon.celestia.feature.aboutus.di.aboutUsModule
 import band.effective.hackathon.celestia.feature.planet.di.planetModule
 import band.effective.hackathon.celestia.feature.quiz.di.quizModule
 import band.effective.hackathon.celestia.feature.splash.di.splashDiModule
@@ -22,6 +23,7 @@ fun initKoin() {
             splashDiModule,
             quizModule,
             planetModule,
+            aboutUsModule,
         )
     }
 }

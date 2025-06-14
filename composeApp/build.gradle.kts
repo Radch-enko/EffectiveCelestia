@@ -19,6 +19,7 @@ kotlin {
             implementation(project(":feature:test"))
             implementation(project(":feature:quiz"))
             implementation(project(":feature:planet"))
+            implementation(project(":feature:aboutus"))
             implementation(libs.bundles.koin)
             implementation(libs.androidx.navigation.compose)
             implementation(libs.napier)

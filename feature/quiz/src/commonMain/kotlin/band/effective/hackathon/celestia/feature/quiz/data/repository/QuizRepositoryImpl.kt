@@ -43,12 +43,12 @@ class QuizRepositoryImpl : QuizRepository {
         ),
         Question(
             id = 4,
-            text = "Где тебе комфортнее?",
+            text = "В каком уголке Вселенной ты чувствуешь гармонию?",
             answers = listOf(
-                Answer(1, "Глубины космоса"),
-                Answer(2, "Туманность мечты"),
-                Answer(3, "Полюс света"),
-                Answer(4, "Гравитация Земли")
+                Answer(1, "Созвездие надежды"),
+                Answer(2, "Орбита покоя"),
+                Answer(3, "Млечный путь тишины"),
+                Answer(4, "Звезда дома")
             )
         )
     )

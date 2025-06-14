@@ -8,13 +8,13 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import androidx.navigation.toRoute
+import band.effective.hackathon.celestia.feature.aboutus.presentation.AboutUsScreen
 import band.effective.hackathon.celestia.feature.planet.presentation.PlanetScreen
 import band.effective.hackathon.celestia.feature.quiz.presentation.QuizScreen
 import band.effective.hackathon.celestia.feature.splash.presentation.SplashScreen
 import band.effective.hackathon.celestia.feature.test.presentation.TestScreen
 import band.effective.hackathon.celestia.mapper.toNavArgument
 import band.effective.hackathon.celestia.mapper.toRecommendedPlanet
-import band.effective.hackathon.celestia.screens.AboutUsScreen
 
 /**
  * Main navigation graph for the app
@@ -68,7 +68,11 @@ fun NavGraph(navController: NavHostController, startDestination: String = NavRou
             route = NavRoutes.AboutUs.ROUTE
         ) {
             composable(NavRoutes.AboutUs.ABOUT_US_SCREEN) {
-                AboutUsScreen()
+                AboutUsScreen(
+                    onVote = {
+                        // Handle vote action here
+                    }
+                )
             }
         }
     }
