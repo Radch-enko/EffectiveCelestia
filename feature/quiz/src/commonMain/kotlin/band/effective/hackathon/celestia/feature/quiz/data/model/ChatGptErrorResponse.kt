@@ -7,5 +7,5 @@ import kotlinx.serialization.Serializable
  */
 @Serializable
 data class ChatGptErrorResponse(
-    val error: ChatGptError
+    val error: GptErrorDto
 )

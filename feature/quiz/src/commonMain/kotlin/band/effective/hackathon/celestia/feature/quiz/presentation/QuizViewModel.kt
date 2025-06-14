@@ -193,9 +193,10 @@ class QuizViewModel(
                     mutableState.update {
                         it.copy(
                             recommendedPlanet = output.planet.planetName,
-                            isLoading = false
+                            isLoading = false,
                         )
                     }
+                    mutableEffect.emit(QuizEffect.QuizCompleted(output.planet))
                 }
             )
         }

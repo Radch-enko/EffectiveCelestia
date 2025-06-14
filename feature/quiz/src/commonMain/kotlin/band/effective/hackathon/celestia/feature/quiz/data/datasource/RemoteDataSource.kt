@@ -1,7 +1,7 @@
 package band.effective.hackathon.celestia.feature.quiz.data.datasource
 
 import band.effective.hackathon.celestia.core.domain.functional.Either
-import band.effective.hackathon.celestia.feature.quiz.data.model.ChatGptError
+import band.effective.hackathon.celestia.feature.quiz.data.model.GptErrorDto
 import band.effective.hackathon.celestia.feature.quiz.data.model.RecommendedPlanetDto
 
 /**
@@ -14,5 +14,5 @@ interface RemoteDataSource {
      * @param userAnswers Map of question IDs to selected answers
      * @return Either containing the analysis from ChatGPT or an error
      */
-    suspend fun sendAnswersToChatGpt(userAnswers: Map<String, String>): Either<ChatGptError, RecommendedPlanetDto>
+    suspend fun sendAnswersToChatGpt(userAnswers: Map<String, String>): Either<GptErrorDto, RecommendedPlanetDto>
 }

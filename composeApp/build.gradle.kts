@@ -62,7 +62,8 @@ tasks.withType<ComposeHotRun>().configureEach {
     mainClass.set("MainKt")
 }
 
-val chatGPTApiKey: String = gradleLocalProperties(rootDir, providers).getProperty("chatgpt.api.key")
+val chatGPTApiKey: String = gradleLocalProperties(rootDir, providers).getProperty("gpt.api.key")
+val gptModelId: String = gradleLocalProperties(rootDir, providers).getProperty("gpt.model.id")
 
 buildkonfig {
     packageName = "band.effective.hackathon.celestia"
@@ -72,6 +73,12 @@ buildkonfig {
             com.codingfeline.buildkonfig.compiler.FieldSpec.Type.STRING,
             "CHATGPT_API_KEY",
             chatGPTApiKey,
+        )
+
+        buildConfigField(
+            com.codingfeline.buildkonfig.compiler.FieldSpec.Type.STRING,
+            "GPT_MODEL_ID",
+            gptModelId,
         )
     }
 }

@@ -25,5 +25,6 @@ fun initKoin() {
 }
 
 val buildKonfigModule = module {
-    single<String>(named("ChatGptKey")) { BuildKonfig.CHATGPT_API_KEY }
+    single<String>(named("GptKey")) { BuildKonfig.CHATGPT_API_KEY }
+    single<String>(named("GptModelId")) { BuildKonfig.GPT_MODEL_ID }
 }

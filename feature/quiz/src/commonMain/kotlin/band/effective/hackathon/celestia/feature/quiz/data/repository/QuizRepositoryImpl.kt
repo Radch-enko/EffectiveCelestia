@@ -8,7 +8,7 @@ import band.effective.hackathon.celestia.feature.quiz.domain.repository.QuizRepo
  * Implementation of [QuizRepository] that provides quiz data.
  */
 class QuizRepositoryImpl : QuizRepository {
-    
+
     // In-memory cache of questions
     private val questions = listOf(
         Question(
@@ -52,11 +52,11 @@ class QuizRepositoryImpl : QuizRepository {
             )
         )
     )
-    
+
     override suspend fun getQuestions(): List<Question> {
         return questions
     }
-    
+
     override suspend fun getQuestionById(questionId: Int): Question? {
         return questions.find { it.id == questionId }
     }

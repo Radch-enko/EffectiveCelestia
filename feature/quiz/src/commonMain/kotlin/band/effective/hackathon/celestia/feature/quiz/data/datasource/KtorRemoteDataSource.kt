@@ -6,14 +6,14 @@ import band.effective.hackathon.celestia.core.domain.functional.Either
 import band.effective.hackathon.celestia.core.domain.functional.map
 import band.effective.hackathon.celestia.core.domain.functional.mapError
 import band.effective.hackathon.celestia.core.domain.functional.success
-import band.effective.hackathon.celestia.feature.quiz.data.model.ChatGptError
 import band.effective.hackathon.celestia.feature.quiz.data.model.ChatGptErrorResponse
-import band.effective.hackathon.celestia.feature.quiz.data.model.ChatGptRequest
-import band.effective.hackathon.celestia.feature.quiz.data.model.CompletionOptions
+import band.effective.hackathon.celestia.feature.quiz.data.model.CompletionOptionsDto
+import band.effective.hackathon.celestia.feature.quiz.data.model.GptErrorDto
+import band.effective.hackathon.celestia.feature.quiz.data.model.GptRequest
 import band.effective.hackathon.celestia.feature.quiz.data.model.GptResponse
 import band.effective.hackathon.celestia.feature.quiz.data.model.Message
-import band.effective.hackathon.celestia.feature.quiz.data.model.ReasoningOptions
 import band.effective.hackathon.celestia.feature.quiz.data.model.RecommendedPlanetDto
+import band.effective.hackathon.celestia.feature.quiz.data.utils.toJsonString
 import io.github.aakira.napier.Napier
 import io.ktor.client.HttpClient
 import io.ktor.client.request.headers
@@ -26,13 +26,17 @@ import io.ktor.http.contentType
 import io.ktor.utils.io.InternalAPI
 import kotlinx.serialization.json.Json
 
+private const val GPT_REQUEST_URL = "https://llm.api.cloud.yandex.net/foundationModels/v1/completion"
+private const val GPT_PROMPT =
+    """Исходя из ответов пользователя опередели какая он планета. Ответ сформируй в формате json: { "planetName": "", "description": "", "type": 1 }. Поле Type - это размер планеты (возможные значения от 1 до 3) """
 
 /**
  * Implementation of RemoteDataSource using Ktor client
  */
 class KtorRemoteDataSource(
     private val httpClient: HttpClient,
-    private val chatGptApiKey: String,
+    private val gptApiKey: String,
+    private val gptModel: String,
 ) : RemoteDataSource {
 
     private val json = Json { ignoreUnknownKeys = true }
@@ -44,26 +48,26 @@ class KtorRemoteDataSource(
      * @return Either containing the analysis from ChatGPT or an error
      */
     @OptIn(InternalAPI::class)
-    override suspend fun sendAnswersToChatGpt(userAnswers: Map<String, String>): Either<ChatGptError, RecommendedPlanetDto> {
+    override suspend fun sendAnswersToChatGpt(userAnswers: Map<String, String>): Either<GptErrorDto, RecommendedPlanetDto> {
         // Format the answers for the request
         val formattedAnswers = userAnswers.entries.joinToString("\n") { (questionId, answerText) ->
             "$questionId: $answerText"
         }
+        return success(
+            RecommendedPlanetDto(
+                planetName = "Test planet name",
+                description = "Planet description",
+                type = 1,
+            )
+        )
         // Create the request body
-        val requestBody = ChatGptRequest(
-            modelUri = "gpt://b1gbhqbeo0c8k3p9p15d/yandexgpt",
-            completionOptions = CompletionOptions(
-                stream = false,
-                temperature = 0.6,
-                maxTokens = 2000,
-                reasoningOptions = ReasoningOptions(
-                    mode = "DISABLED",
-                )
-            ),
+        val requestBody = GptRequest(
+            modelUri = "gpt://$gptModel/yandexgpt",
+            completionOptions = CompletionOptionsDto.default,
             messages = listOf(
                 Message(
                     role = "system",
-                    text = """Исходя из ответов пользователя опередели какая он планета. Ответ сформируй в формате json: { "planetName": "", "description": "", "type": 1 }. Поле Type - это размер планеты (возможные значения от 1 до 3) """
+                    text = GPT_PROMPT
                 ),
                 Message(
                     role = "user",
@@ -75,50 +79,49 @@ class KtorRemoteDataSource(
         // Make the API call using the Either extension
         return httpClient.postAsEither<GptResponse> {
             post {
-                url("https://llm.api.cloud.yandex.net/foundationModels/v1/completion")
+                url(GPT_REQUEST_URL)
                 contentType(ContentType.Application.Json)
                 headers {
-                    append(HttpHeaders.Authorization, "Bearer $chatGptApiKey")
+                    append(HttpHeaders.Authorization, "Bearer $gptApiKey")
                 }
                 //body = requestBody
                 setBody(requestBody)
             }
         }.map { chatGptResponse ->
             // Extract content from the response
-            val content = chatGptResponse.result.alternatives.first().message.text.replace("```", "")
+            val content = chatGptResponse.result.alternatives.first().message.toJsonString()
             try {
                 val recommendedPlanetDto = json.decodeFromString<RecommendedPlanetDto>(content)
                 return success(recommendedPlanetDto)
             } catch (e: Exception) {
                 error(e)
             }
-        }.mapError { throwable ->
-            // Convert Throwable to ChatGptError
-            when (throwable) {
-                is HttpException -> {
-                    try {
-                        // Try to parse the error response
-                        val errorResponse = json.decodeFromString<ChatGptErrorResponse>(throwable.message)
-                        errorResponse.error
-                    } catch (e: Exception) {
-                        // If parsing fails, create a generic error
-                        Napier.e("Failed to parse error response", e)
-                        ChatGptError(
-                            message = throwable.message,
-                            type = "http_error",
-                            code = throwable.status.toString()
-                        )
-                    }
-                }
+        }.mapError(::toGptError)
+    }
 
-                else -> {
-                    // For other exceptions, create a generic error
-                    ChatGptError(
-                        message = throwable.message ?: "Unknown error",
-                        type = "unknown_error"
+    private fun toGptError(throwable: Throwable): GptErrorDto {
+        return when (throwable) {
+            is HttpException -> { // Try to parse the error response
+                try {
+                    val errorResponse = json.decodeFromString<ChatGptErrorResponse>(throwable.message)
+                    errorResponse.error
+                } catch (e: Exception) { // If parsing fails, create a generic error
+                    Napier.e("Failed to parse error response", e)
+                    GptErrorDto(
+                        message = throwable.message,
+                        type = "http_error",
+                        code = throwable.status.toString()
                     )
                 }
+            }
+
+            else -> { // For other exceptions, create a generic error
+                GptErrorDto(
+                    message = throwable.message ?: "Unknown error",
+                    type = "unknown_error"
+                )
             }
         }
     }
 }
+

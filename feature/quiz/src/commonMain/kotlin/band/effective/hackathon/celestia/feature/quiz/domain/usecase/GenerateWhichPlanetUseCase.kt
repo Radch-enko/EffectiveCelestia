@@ -1,8 +1,8 @@
 package band.effective.hackathon.celestia.feature.quiz.domain.usecase
 
 import band.effective.hackathon.celestia.core.domain.functional.Either
-import band.effective.hackathon.celestia.feature.quiz.data.model.ChatGptError
 import band.effective.hackathon.celestia.feature.quiz.domain.model.Answer
+import band.effective.hackathon.celestia.feature.quiz.domain.model.GptError
 import band.effective.hackathon.celestia.feature.quiz.domain.model.RecommendedPlanet
 
 /**
@@ -10,7 +10,7 @@ import band.effective.hackathon.celestia.feature.quiz.domain.model.RecommendedPl
  */
 interface GenerateWhichPlanetUseCase {
 
-    suspend operator fun invoke(params: Params): Either<ChatGptError, Output>
+    suspend operator fun invoke(params: Params): Either<GptError, Output>
 
     /**
      * Parameters for the GenerateWhichPlanetUseCase.

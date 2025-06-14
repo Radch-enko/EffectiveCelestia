@@ -77,11 +77,11 @@ private fun QuizScreenContent(
                     .height(52.dp + 32.dp)
                     .padding(horizontal = 38.dp, vertical = 16.dp),
             ) {
-                if (state.step != 0) {
-                    BackButton(modifier = Modifier.align(Alignment.CenterStart), onClick = onBackClick)
-                }
+                if (!state.isLoading) {
+                    if (state.step != 0) {
+                        BackButton(modifier = Modifier.align(Alignment.CenterStart), onClick = onBackClick)
+                    }
 
-                if (state.isLoading) {
                     ProgressBar(
                         modifier = Modifier.align(Alignment.Center).width(120.dp),
                         currentProgress = state.step.toFloat(),

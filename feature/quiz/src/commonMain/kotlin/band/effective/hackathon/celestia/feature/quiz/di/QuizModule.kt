@@ -2,9 +2,10 @@ package band.effective.hackathon.celestia.feature.quiz.di
 
 import band.effective.hackathon.celestia.feature.quiz.data.datasource.KtorRemoteDataSource
 import band.effective.hackathon.celestia.feature.quiz.data.datasource.RemoteDataSource
-import band.effective.hackathon.celestia.feature.quiz.data.repository.ChatGPTRepositoryImpl
+import band.effective.hackathon.celestia.feature.quiz.data.mapper.GptDomainMapper
+import band.effective.hackathon.celestia.feature.quiz.data.repository.GPTRepositoryImpl
 import band.effective.hackathon.celestia.feature.quiz.data.repository.QuizRepositoryImpl
-import band.effective.hackathon.celestia.feature.quiz.domain.repository.ChatGPTRepository
+import band.effective.hackathon.celestia.feature.quiz.domain.repository.GPTRepository
 import band.effective.hackathon.celestia.feature.quiz.domain.repository.QuizRepository
 import band.effective.hackathon.celestia.feature.quiz.domain.usecase.GenerateWhichPlanetUseCase
 import band.effective.hackathon.celestia.feature.quiz.domain.usecase.GetQuestionByIdUseCase
@@ -28,11 +29,20 @@ import org.koin.dsl.module
  */
 val quizModule = module {
     // Data Sources
-    single<RemoteDataSource> { KtorRemoteDataSource(get(), get(named("ChatGptKey"))) }
+    single<RemoteDataSource> {
+        KtorRemoteDataSource(
+            get(),
+            get(named("GptKey")),
+            get(named("GptModelId"))
+        )
+    }
+
+    // Mappers
+    single { GptDomainMapper() }
 
     // Repositories
     single<QuizRepository> { QuizRepositoryImpl() }
-    single<ChatGPTRepository> { ChatGPTRepositoryImpl(get()) }
+    single<GPTRepository> { GPTRepositoryImpl(get(), get()) }
 
     // Use Cases
     single<GetQuestionsUseCase> { GetQuestionsUseCaseImpl(get()) }
