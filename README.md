@@ -1,174 +1,192 @@
-# Effective Celestia
 
-## Description
+# 🌌 Effective Celestia
 
-Effective Celestia is a cross-platform educational application about celestial bodies. The application allows users to
-take quizzes about space and planets, and based on their answers, recommends planets that match their preferences. It
-provides detailed information about various celestial bodies with beautiful animations and a space-themed interface.
+**Effective Celestia** is a ✨ cross-platform educational app ✨ that brings the wonders of space to your fingertips. Designed as an **open-source sample project using Compose Multiplatform**, it aims to showcase **modern UI/UX, scalable architecture, and best practices** for quickly bootstrapping production-ready apps across Android, iOS, Desktop, and Web.
 
-The application is built using Kotlin Multiplatform and Compose Multiplatform, allowing it to run on multiple platforms
-including Android, iOS, Desktop (Windows, macOS, Linux), and Web browsers.
+---
 
-## Screenshots
+## 🚀 Project Goal
 
-### Android
+This project serves as a **starter template** for developers building Kotlin Multiplatform apps. It demonstrates:
 
-*Screenshots for Android are available in the application.*
+- Clean, scalable architecture (Clean Architecture)
+- State management, DI, navigation, and platform-specific patterns
+- A modern, polished user interface
+- Compose Multiplatform’s power across all major targets
 
-### iOS
+---
 
-*Screenshots for iOS are available in the application.*
+## 📸 Screenshots
 
-### Desktop
+<table>
+  <tr>
+    <td align="center"><strong>Android</strong><br/><img src="docs/media/android_demo.gif" width="250"/></td>
+    <td align="center"><strong>iOS</strong><br/><img src="docs/media/ios_demo.gif" width="250"/></td>
+    <td align="center"><strong>Desktop</strong><br/><img src="docs/media/macos_demo.gif" width="250"/></td>
+  </tr>
+  <tr>
+    <td colspan="3" align="center">
+      <strong>Web</strong><br/>
+      <a href="https://radch-enko.github.io/effectiive.hackathon.celestia/">
+        <img src="docs/media/web_demo.gif" width="500"/>
+      </a>
+    </td>
+  </tr>
+</table>
 
-*Screenshots for Desktop are available in the application.*
+---
 
-### Web
+## 🛠️ Tech Stack
 
-The web version of the application is available
-at: [https://radch-enko.github.io/effectiive.hackathon.celestia/](https://radch-enko.github.io/effectiive.hackathon.celestia/)
+- **Kotlin Multiplatform** – shared logic across platforms  
+- **Jetpack Compose Multiplatform** – unified declarative UI  
+- **Koin** – lightweight dependency injection  
+- **Kotlinx Serialization** – JSON handling  
+- **Napier** – multiplatform logging  
+- **Navigation Compose** – declarative screen transitions  
+- **Material 3** – modern UI styling  
+- **YandexGPT API** – AI-powered content generation  
+- **Gradle (Kotlin DSL)** – build automation
 
-## Tech Stack
+---
 
-- **Kotlin Multiplatform**: For sharing code across platforms
-- **Compose Multiplatform**: For UI development
-- **Koin**: For dependency injection
-- **Kotlinx Serialization**: For JSON serialization/deserialization
-- **Napier**: For logging
-- **Navigation Compose**: For navigation between screens
-- **YandexGPT API**: For generating quiz content and planet recommendations
-- **Material3**: For UI design
-- **Gradle**: For build automation
+## ▶️ Getting Started
 
-## How to Launch
+### 🔧 Prerequisites
 
-### Prerequisites
-
-- Check your system with [KDoctor](https://github.com/Kotlin/kdoctor)
-- Install JDK 17 or higher on your machine
-- Add `local.properties` file to the project root and set a path to Android SDK there
-- Configure YandexGPT API key in `local.properties`:
+- Run [KDoctor](https://github.com/Kotlin/kdoctor) to validate environment
+- Install **JDK 17+**
+- Create a `local.properties` file with your Android SDK path
+- Add YandexGPT credentials:
   ```
   gpt.api.key=your_api_key_here
   gpt.model.id=your_model_id_here
   ```
 
-### Android
+---
 
-To run the application on an Android device/emulator:
+### 📱 Android
 
-- Open the project in Android Studio and run the imported Android run configuration
+To run:
 
-To build the application bundle:
+- Open in Android Studio, select Android run config
 
-- Run `./gradlew :composeApp:assembleDebug`
-- Find the `.apk` file in `composeApp/build/outputs/apk/debug/composeApp-debug.apk`
+To build APK:
 
-Run Android UI tests on the connected device:
+```bash
+./gradlew :composeApp:assembleDebug
+```
 
-- `./gradlew :composeApp:connectedDebugAndroidTest`
+APK will be located at `composeApp/build/outputs/apk/debug/`
 
-### Desktop
+To run UI tests:
 
-Run the desktop application:
+```bash
+./gradlew :composeApp:connectedDebugAndroidTest
+```
 
-- `./gradlew :composeApp:run`
+---
 
-Run the desktop with hot reload:
+### 💻 Desktop
 
-- `./gradlew :composeApp:jvmRunHot`
+Run the desktop app:
 
-Run desktop UI tests:
+```bash
+./gradlew :composeApp:run
+```
 
-- `./gradlew :composeApp:jvmTest`
+With hot reload:
 
-### iOS
+```bash
+./gradlew :composeApp:jvmRunHot
+```
 
-To run the application on an iPhone device/simulator:
+UI tests:
 
-- Open `iosApp/iosApp.xcproject` in Xcode and run the standard configuration
-- Or use
-  the [Kotlin Multiplatform Mobile plugin](https://plugins.jetbrains.com/plugin/14936-kotlin-multiplatform-mobile) for
-  Android Studio
+```bash
+./gradlew :composeApp:jvmTest
+```
 
-Run iOS simulator UI tests:
+---
 
-- `./gradlew :composeApp:iosSimulatorArm64Test`
+### 🍏 iOS
 
-### Web Browser (Alpha)
+To run:
 
-Run the browser application:
+- Open `iosApp/iosApp.xcproject` in Xcode  
+- Or use the [KMM Plugin](https://plugins.jetbrains.com/plugin/14936-kotlin-multiplatform-mobile)
 
-- `./gradlew :composeApp:wasmJsBrowserDevelopmentRun --continue`
+iOS simulator tests:
 
-Run browser UI tests:
+```bash
+./gradlew :composeApp:iosSimulatorArm64Test
+```
 
-- `./gradlew :composeApp:wasmJsBrowserTest`
+---
 
-## Project Structure
+### 🌐 Web (Alpha)
+
+Run in browser:
+
+```bash
+./gradlew :composeApp:wasmJsBrowserDevelopmentRun --continue
+```
+
+Browser UI tests:
+
+```bash
+./gradlew :composeApp:wasmJsBrowserTest
+```
+
+---
+
+## 🧱 Project Structure
 
 ### Modules
 
-#### composeApp
+- `composeApp` – multiplatform entry points and navigation  
+- `core:*` – shared core logic  
+  - `core:ui` – common components and theming  
+  - `core:domain` – models and interfaces  
+  - `core:data` – repositories and data sources  
+- `feature:*` – modular features  
+  - `splash`, `quiz`, `planet`, `test`, `aboutus`
 
-The main application module that contains the entry points for all platforms and the main navigation logic.
+---
 
-#### core
+### 🧭 Architecture
 
-Contains core functionality shared across features:
+The project follows **Clean Architecture** with these layers:
 
-- **core:ui**: Common UI components, themes, and styles
-- **core:domain**: Domain models and interfaces
-- **core:data**: Data sources, repositories, and data models
+- **Presentation** – UI, ViewModels (MVI pattern)
+- **Domain** – business logic, use cases
+- **Data** – repositories, data models, APIs
 
-#### feature
+Each feature module respects this structure for clarity and reusability.
 
-Contains feature modules, each implementing a specific part of the application:
+---
 
-- **feature:splash**: Splash screen shown when the app starts
-- **feature:quiz**: Quiz functionality where users answer questions about space
-- **feature:planet**: Planet information display based on quiz results
-- **feature:test**: Test functionality
-- **feature:aboutus**: Information about the application and its creators
+### 🔑 Key Components
 
-### Architecture
+- **Navigation** – Compose Navigation with centralized route definitions (`NavRoutes.kt`)  
+- **Dependency Injection** – via `Koin`, structured per module  
+- **UI Layer** – Compose + Material 3 + custom space-themed components  
+- **AI Integration** – using YandexGPT to generate quizzes and recommendations
 
-The application follows a clean architecture approach with the following layers:
+---
 
-- **Presentation**: UI components, screens, and view models (MVI pattern)
-- **Domain**: Business logic, use cases, and domain models
-- **Data**: Data sources, repositories, and data models
+## 📈 Roadmap
 
-Each feature module follows this architecture and is organized into corresponding packages.
+- [ ] Add test coverage  
+- [ ] CI/CD pipeline setup  
+- [ ] Code linting configuration
 
-### Key Components
+---
 
-#### Navigation
+## 👥 Authors
 
-The application uses Compose Navigation for navigation between screens. The main navigation routes are defined in
-`NavRoutes.kt`.
+**Software Engineer** – [Stanislav Radchenko](https://github.com/radch-enko)  
+📬 Telegram: [@StanislavRadchenko](https://t.me/StanislavRadchenko)
 
-#### Dependency Injection
-
-Koin is used for dependency injection throughout the application. Each module has its own Koin module defined in a `di`
-package.
-
-#### UI
-
-The UI is built using Compose Multiplatform with Material3 design. The application has a space-themed background and
-custom UI components.
-
-#### API Integration
-
-The application integrates with the YandexGPT API to generate quiz questions and planet recommendations based on user
-answers.
-
-## Contacts and Authors
-
-### Authors
-
-Software Engineer - [StanislavRadchenko](https://github.com/radch-enko)  
-Telegram: [@StanislavRadchenko](https://t.me/StanislavRadchenko)
-
-UI/UX Designer - Alexandra Korytova  
-Telegram: [@alesrkt](https://t.me/alesrkt)
+**UI/UX Designer** – Alexandra Korytova  
+🎨 Telegram: [@alesrkt](https://t.me/alesrkt)
