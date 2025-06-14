@@ -1,6 +1,7 @@
 rootProject.name = "EffectiveCelestia"
 
 pluginManagement {
+    includeBuild("build-logic")
     repositories {
         google {
             content { 
@@ -34,4 +35,11 @@ plugins {
 }
 
 include(":composeApp")
-
+include(":core:ui")
+include(":core:domain")
+include(":core:data")
+include(":feature:splash")
+include(":feature:test")
+include(":feature:quiz")
+include(":feature:planet")
+include(":feature:aboutus")

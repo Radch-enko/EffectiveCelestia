@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="aboutus_title">О нас</string>
+    <string name="aboutus_name_stanislav">Станислав Радченко</string>
+    <string name="aboutus_role_software_engineer">Software Engineer</string>
+    <string name="aboutus_telegram_stanislav">@StanislavRadchenko</string>
+    <string name="aboutus_name_alexandra">Александра Корытова</string>
+    <string name="aboutus_role_designer">UI/UX Designer</string>
+    <string name="aboutus_telegram_alexandra">@alesrkt</string>
+    <string name="aboutus_vote_button">Проголосовать за нас</string>
+    <string name="aboutus_description">*Effective Celestia* — это хакатонный проект, в котором мы соединили технологии и немного космической поэзии.\nМы сделали это, чтобы напомнить: *каждый сияет по-своему*.</string>
+    <string name="aboutus_error_message">Произошла ошибка</string>
+</resources>

@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="quiz_generating_answer">Генерация ответа...</string>
+    <string name="quiz_unknown_error">Unknown error</string>
+</resources>
