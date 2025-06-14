@@ -167,7 +167,7 @@ private fun PlanetScreenContent(
                         }
                         launch {
                             animatedScale.animateTo(
-                                targetValue = 1.8f,
+                                targetValue = 1.4f,
                                 animationSpec = tween(durationMillis = 1000, easing = FastOutSlowInEasing)
                             )
                         }
@@ -183,7 +183,7 @@ private fun PlanetScreenContent(
                             }
                         ),
                         contentDescription = null,
-                        modifier = Modifier
+                        modifier = Modifier.weight(1f)
                             .graphicsLayer {
                                 alpha = animatedAlpha.value
                                 scaleX = animatedScale.value
