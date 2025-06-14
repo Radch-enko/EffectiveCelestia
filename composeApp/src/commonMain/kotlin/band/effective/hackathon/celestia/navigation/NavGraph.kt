@@ -6,7 +6,6 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.navOptions
 import androidx.navigation.navigation
 import androidx.navigation.toRoute
 import band.effective.hackathon.celestia.feature.planet.presentation.PlanetScreen
@@ -43,9 +42,7 @@ fun NavGraph(navController: NavHostController, startDestination: String = NavRou
         ) {
             composable(NavRoutes.Quiz.QUIZ_SCREEN) {
                 QuizScreen(onQuizCompleted = { planet ->
-                    navController.navigate(planet.toNavArgument(), navOptions = navOptions {
-                        popUpTo(NavRoutes.Quiz.QUIZ_SCREEN) { inclusive = true }
-                    })
+                    navController.navigate(planet.toNavArgument())
                 })
             }
 
